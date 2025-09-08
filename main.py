@@ -60,7 +60,7 @@ def setup_voicemeeter() -> voicemeeter.remote:
     return vmr
 
 def setup_serial() -> serial.Serial:
-    return serial.Serial(SERIAL_PORT, 9600, timeout=5)
+    return serial.Serial(SERIAL_PORT, 9600)
 
 
 def main(ptt: multiPTT, ser: serial.Serial) -> None:
