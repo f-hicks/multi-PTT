@@ -23,6 +23,8 @@ VOICEMEETER_KIND = "banana"
 class multiPTT:
     def __init__(self, vmr, numButtons:int = 2):
         if numButtons < 1 or numButtons > 5:
+            raise
+        else:
             self.outputs = [0]*numButtons
         self.vmr = vmr
 
@@ -65,13 +67,18 @@ def setup_serial() -> serial.Serial:
 
 def main(ptt: multiPTT, ser: serial.Serial) -> None:
     while True:
-        data = str(ser.readline())
-        mic = int(data(1))
-        if mic <= NUM_BUTTONS:
-            if data[0] == "+":
-                ptt.turnOnMic(mic)
-            elif data[0] == "-":
-                ptt.turnOffMic(mic)
+        try:
+            data = str(ser.readline()).replace("b","").replace("'","").replace(r"\r\n","")
+            print(data)
+            if data != "b''" and len(data)== 2:
+                mic = int(data[1]) -1
+                if mic <= NUM_BUTTONS-1:
+                    if data[0] == "+":
+                        ptt.turnOnMic(mic)
+                    elif data[0] == "-":
+                        ptt.turnOffMic(mic)
+        except Exception as e:
+            print(e)
 
 if __name__ == "__main__":
     vmr = setup_voicemeeter()
