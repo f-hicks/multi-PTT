@@ -1,0 +1,2 @@
+WIFI_SSID = "<SSID HERE>"
+WIFI_PASSWORD = "<Password HERE>"
