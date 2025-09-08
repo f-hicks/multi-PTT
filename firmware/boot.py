@@ -13,6 +13,5 @@ def do_connect():
         while not sta_if.isconnected():
             pass
     print('network config:', sta_if.ipconfig('addr4'))
-    
-do_connect()
-os.dupterm(None, 1)
+
+# do_connect()
