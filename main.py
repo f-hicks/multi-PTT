@@ -26,7 +26,7 @@ class multiPTT:
             raise
         else:
             self.outputs = [0]*numButtons
-        self.vmr = vmr
+            self.vmr = vmr
 
     def turnOnMic(self, id: int) -> bool:
         try:
