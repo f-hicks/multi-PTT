@@ -1,6 +1,7 @@
 import pyautogui
 import serial
 import voicemeeter
+import time
 
 ###########################################
 #                  Config                 #
@@ -13,7 +14,7 @@ import voicemeeter
 NUM_BUTTONS: int = 2 
 
 # The serial port the control panel is located on.
-SERIAL_PORT: str = "COM3"
+SERIAL_PORT: str = "COM12"
 
 # The type of voicemeeter in use. Either "basic", "banana", or "potato"
 VOICEMEETER_KIND = "banana"
@@ -77,6 +78,11 @@ def main(ptt: multiPTT, ser: serial.Serial) -> None:
                         ptt.turnOnMic(mic)
                     elif data[0] == "-":
                         ptt.turnOffMic(mic)
+        except serial.SerialException as e:
+            print(e,"\nreseting serial interface\n")
+            ser.close()
+            time.sleep(1)
+            ser = setup_serial()
         except Exception as e:
             print(e)
 
