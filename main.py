@@ -31,9 +31,10 @@ class multiPTT:
 
     def turnOnMic(self, id: int) -> bool:
         try:
-            self.outputs[id] = True
-            pyautogui.keyDown("F13")
-            self.vmr.inputs[id].mute = False
+            if not self.outputs[id]:
+                self.outputs[id] = True
+                pyautogui.keyDown("F13")
+                self.vmr.inputs[id].mute = False
             
         except IndexError:
             return False
@@ -42,11 +43,12 @@ class multiPTT:
         
     def turnOffMic(self, id: int) -> bool: 
         try: 
-            self.outputs[id] = False
-            if not any(self.outputs):
-                pyautogui.keyUp("F13")
-                
-            self.vmr.inputs[id].mute = True
+            if self.outputs[id]:
+                self.outputs[id] = False
+                if not any(self.outputs):
+                    pyautogui.keyUp("F13")
+                    
+                self.vmr.inputs[id].mute = True
         
         except IndexError:
             return False
