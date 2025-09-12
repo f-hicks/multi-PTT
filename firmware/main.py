@@ -1,15 +1,21 @@
-from machine import Pin
+from machine import Pin, Signal
+from config import PINS
 import sys
+import time
 
-button1 = Pin(9, Pin.IN, Pin.PULL_UP) # built-in button
-button2 = Pin(3, Pin.IN, Pin.PULL_UP)  # D1
-b1Value = True
-b2Value = True
+buttons = []
+led = Signal(Pin(8, Pin.OUT, value=1), invert=True)
+
+for pin in PINS:
+    buttons.append([Signal(Pin(pin, Pin.IN, Pin.PULL_UP), invert=True), False])
 
 while True:
-    if button1.value() != b1Value:
-        sys.stdout.write("-1\n" if button1.value() else "+1\n")
-        b1Value = button1.value()
-    if button2.value() != b2Value:
-        sys.stdout.write("-2\n" if button2.value() else "+2\n")
-        b2Value = button2.value()
+    string = ""
+    for i, button in enumerate(buttons):
+        value = button[0].value()
+        string = string + str("+" if value else "-")
+        button[1] = value
+    string = string + "\n"
+    sys.stdout.write(string)
+    led.value(any([button[1] for button in buttons]))    
+    time.sleep(0.001)

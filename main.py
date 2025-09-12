@@ -71,18 +71,21 @@ def main(ptt: multiPTT, ser: serial.Serial) -> None:
         try:
             data = str(ser.readline()).replace("b","").replace("'","").replace(r"\r\n","")
             print(data)
-            if data != "b''" and len(data)== 2:
-                mic = int(data[1]) -1
-                if mic <= NUM_BUTTONS-1:
-                    if data[0] == "+":
-                        ptt.turnOnMic(mic)
-                    elif data[0] == "-":
-                        ptt.turnOffMic(mic)
+            if len(data) >= NUM_BUTTONS:
+                for i in range(NUM_BUTTONS):
+                    if data[i] == "+":
+                        ptt.turnOnMic(i)
+                    elif data[i] == "-":
+                        ptt.turnOffMic(i)
         except serial.SerialException as e:
-            print(e,"\nreseting serial interface\n")
+            print(e,"\nresetting serial interface\n")
             ser.close()
-            time.sleep(1)
-            ser = setup_serial()
+            time.sleep(1) 
+            try:
+                ser = setup_serial()
+            except Exception as e:
+                print(e)
+                time.sleep(1)
         except Exception as e:
             print(e)
 
